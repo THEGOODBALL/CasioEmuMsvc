@@ -100,6 +100,7 @@ HwController.Value2=Hệ số độ sáng nháy màn hình
 HwController.ScreenBufferSelect=Chọn buffer màn hình
 HwController.CPS=Chu kỳ mỗi giây
 HwController.Interrupt=Kích hoạt ngắt
+HwController.HotReload=Tải lại nhanh
 
 MemBP.BPType=Chọn loại điểm dừng:
 MemBP.Delete=Xóa
@@ -139,6 +140,7 @@ Ui.ForceUpdateLang=Bắt buộc cập nhật ngôn ngữ
 Ui.ForceUpdateLangDesc=Tải lại ngôn ngữ mặc định (thường dùng để cập nhật lại file ngôn ngữ nếu có bản cập nhật cho android)
 Ui.Browse=Duyệt
 Ui.InjectionFilePath=Đường dẫn file custom inj
+Ui.DisableVibration=Tắt rung
 
 Rop.Input=Đầu vào
 Rop.InputSize=Nhập

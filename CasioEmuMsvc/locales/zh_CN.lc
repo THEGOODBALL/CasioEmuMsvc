@@ -99,6 +99,7 @@ HwController.Value2=闪屏对比度补偿
 HwController.ScreenBufferSelect=屏幕缓冲区选择
 HwController.CPS=每秒周期数
 HwController.Interrupt=触发中断
+HwController.HotReload=热重载
 
 MemBP.BPType=选择断点类型：
 MemBP.Delete=删除
@@ -141,6 +142,7 @@ Ui.ForceUpdateLang=强制更新语言
 Ui.ForceUpdateLangDesc=重新加载默认语言（通常用于在 android 有更新时更新语言文件）
 Ui.Browse=浏览
 Ui.InjectionFilePath=注入文件路径
+Ui.DisableVibration=禁用振动
 
 Rop.LoadToInputArea=加载到输入区
 Rop.LoadedTip=已加载

@@ -1,6 +1,7 @@
 ﻿#include "WatchWindow.hpp"
-#include "Chipset//Chipset.hpp"
 #include "Chipset/CPU.hpp"
+#include "Chipset/Chipset.hpp"
+#include "Chipset/ePSCpu.h"
 #include "CodeViewer.hpp"
 #include "Config.hpp"
 #include "Models.h"
@@ -16,33 +17,55 @@
 #include <stdlib.h>
 
 void WatchWindow::PrepareRX() {
-	for (int i = 0; i < 16; i++) {
-		sprintf((char*)reg_rx[i], "%02x", m_emu->chipset.cpu.reg_r[i] & 0x0ff);
+	auto eps = m_emu->chipset.epscpu;
+	if (eps) {
+		sprintf(reg_pc, "%05x", eps->PC() >> 1);
+		if (eps->FSR & 0x80) {
+			sprintf(reg_lr, "%05x", (uint32_t)((eps->BSR << 7) | (eps->FSR & 0x7f)));
+		}
+		else {
+			sprintf(reg_lr, "%02x(SFR)", (uint32_t)((eps->FSR & 0x7f)));
+		}
+		sprintf(reg_ea, "%05x", (uint32_t)((eps->BSR1 << 7) | (eps->FSR1 & 0x7f)));
+		sprintf(reg_ex1, "%05x", (uint32_t)((eps->BSR2 << 7) | (eps->FSR2 & 0x7f)));
+		sprintf(reg_ex2, "%05x", (uint32_t)(((eps->LCDARH & 0x03) * 0x60) | eps->LCDARL));
+		sprintf(reg_sp, "%04x", eps->STKPTR << 1);
+		sprintf(reg_psw, "%02x", eps->STATUS);
+		sprintf(reg_dsr, "%02x", eps->BSR);
 	}
-	sprintf(reg_pc, "%05x", (uint32_t)(m_emu->chipset.cpu.reg_csr << 16) | m_emu->chipset.cpu.reg_pc);
-	sprintf(reg_lr, "%05x", (uint32_t)(m_emu->chipset.cpu.reg_lcsr << 16) | m_emu->chipset.cpu.reg_lr);
-	sprintf(reg_sp, "%04x", m_emu->chipset.cpu.reg_sp | 0);
-	sprintf(reg_ea, "%04x", m_emu->chipset.cpu.reg_ea | 0);
-	sprintf(reg_psw, "%02x", m_emu->chipset.cpu.reg_psw | 0);
-	sprintf(reg_dsr, "%02x", m_emu->chipset.cpu.reg_dsr | 0);
+	else {
+		for (int i = 0; i < 16; i++) {
+			sprintf((char*)reg_rx[i], "%02x", m_emu->chipset.cpu.reg_r[i] & 0x0ff);
+		}
+		sprintf(reg_pc, "%05x", (uint32_t)(m_emu->chipset.cpu.reg_csr << 16) | m_emu->chipset.cpu.reg_pc);
+		sprintf(reg_lr, "%05x", (uint32_t)(m_emu->chipset.cpu.reg_lcsr << 16) | m_emu->chipset.cpu.reg_lr);
+		sprintf(reg_sp, "%04x", m_emu->chipset.cpu.reg_sp | 0);
+		sprintf(reg_ea, "%04x", m_emu->chipset.cpu.reg_ea | 0);
+		sprintf(reg_psw, "%02x", m_emu->chipset.cpu.reg_psw | 0);
+		sprintf(reg_dsr, "%02x", m_emu->chipset.cpu.reg_dsr | 0);
+	}
 }
 
 void WatchWindow::ShowRX() {
 	char id[10];
-	ImGui::TextColored(ImVec4(0, 200, 0, 255), "RXn: ");
-	for (int i = 0; i < 16; i++) {
-		ImGui::SameLine();
-		sprintf(id, "##data%d", i);
-		ImGui::SetNextItemWidth(char_width * 3);
-		ImGui::TextUnformatted((char*)&reg_rx[i][0]);
+	if (m_emu->chipset.epscpu) {
 	}
-	ImGui::TextUnformatted("ERn: ");
-	for (int i = 0; i < 16; i += 2) {
-		ImGui::SameLine();
-		uint16_t val = m_emu->chipset.cpu.reg_r[i + 1]
-						   << 8 |
-					   m_emu->chipset.cpu.reg_r[i];
-		ImGui::Text("%04x ", val);
+	else {
+		ImGui::TextColored(ImVec4(0, 200, 0, 255), "RXn: ");
+		for (int i = 0; i < 16; i++) {
+			ImGui::SameLine();
+			sprintf(id, "##data%d", i);
+			ImGui::SetNextItemWidth(char_width * 3);
+			ImGui::TextUnformatted((char*)&reg_rx[i][0]);
+		}
+		ImGui::TextUnformatted("ERn: ");
+		for (int i = 0; i < 16; i += 2) {
+			ImGui::SameLine();
+			uint16_t val = m_emu->chipset.cpu.reg_r[i + 1]
+							   << 8 |
+						   m_emu->chipset.cpu.reg_r[i];
+			ImGui::Text("%04x ", val);
+		}
 	}
 	auto show_sfr = ([&](char* ptr, const char* label, int i, int width = 4) {
 		ImGui::TextColored(ImVec4(0, 200, 0, 255), "%s", label);
@@ -53,15 +76,31 @@ void WatchWindow::ShowRX() {
 	});
 	show_sfr(reg_pc, "PC: ", 1, 6);
 	ImGui::SameLine();
-	show_sfr(reg_lr, "LR: ", 2, 6);
-	ImGui::SameLine();
-	show_sfr(reg_ea, "EA: ", 3);
-	ImGui::SameLine();
-	show_sfr(reg_sp, "SP: ", 4);
-	ImGui::SameLine();
-	show_sfr(reg_psw, "PSW: ", 5, 2);
-	ImGui::SameLine();
-	show_sfr(reg_dsr, "DSR: ", 6, 2);
+	if (m_emu->chipset.epscpu) {
+		show_sfr(reg_lr, "INDF0: ", 2, 6);
+		ImGui::SameLine();
+		show_sfr(reg_ea, "INDF1: ", 3, 6);
+		ImGui::SameLine();
+		show_sfr(reg_ex1, "INDF2: ", 7, 6);
+		ImGui::SameLine();
+		show_sfr(reg_sp, "STKPTR: ", 4);
+		ImGui::SameLine();
+		show_sfr(reg_psw, "STATUS: ", 5, 2);
+		ImGui::SameLine();
+		show_sfr(reg_dsr, "BSR: ", 6, 2);
+		show_sfr(reg_ex2, "LCDAR: ", 8, 6);
+	}
+	else {
+		show_sfr(reg_lr, "LR: ", 2, 6);
+		ImGui::SameLine();
+		show_sfr(reg_ea, "EA: ", 3);
+		ImGui::SameLine();
+		show_sfr(reg_sp, "SP: ", 4);
+		ImGui::SameLine();
+		show_sfr(reg_psw, "PSW: ", 5, 2);
+		ImGui::SameLine();
+		show_sfr(reg_dsr, "DSR: ", 6, 2);
+	}
 }
 void WatchWindow::ModRX() {
 	char id[10];
@@ -110,7 +149,7 @@ void WatchWindow::UpdateRX() {
 	auto pc = strtol((char*)reg_pc, nullptr, 16);
 	m_emu->chipset.cpu.reg_pc = (uint16_t)pc;
 	m_emu->chipset.cpu.reg_csr = pc >> 16;
-	 pc = strtol((char*)reg_lr, nullptr, 16);
+	pc = strtol((char*)reg_lr, nullptr, 16);
 	m_emu->chipset.cpu.reg_lr = (uint16_t)pc;
 	m_emu->chipset.cpu.reg_lcsr = pc >> 16;
 	m_emu->chipset.cpu.reg_ea = (uint16_t)strtol((char*)reg_ea, nullptr, 16);
@@ -141,13 +180,14 @@ inline static std::string lookup_symbol(uint32_t addr) {
 void WatchWindow::RenderCore() {
 	char_width = ImGui::CalcTextSize("F").x;
 	casioemu::Chipset& chipset = m_emu->chipset;
-	ImGui::BeginChild("##reg_trace", ImVec2(0, ImGui::GetTextLineHeightWithSpacing() *8), false, 0);
+	ImGui::BeginChild("##reg_trace", ImVec2(0, ImGui::GetTextLineHeightWithSpacing() * 8), false, 0);
 	auto rm = m_emu->chipset.run_mode;
 	using casioemu::Chipset::RM_HALT;
 	using casioemu::Chipset::RM_RUN;
 	using casioemu::Chipset::RM_STOP;
-    ImGui::TextUnformatted(("WatchWindow.CoreStatus"_l + ": " + 
-        (rm == RM_RUN ? "Run" : (rm == RM_STOP ? "Stop" : (rm == RM_HALT ? "Halt" : "?")))).c_str());
+	ImGui::TextUnformatted(("WatchWindow.CoreStatus"_l + ": " +
+							(rm == RM_RUN ? "Run" : (rm == RM_STOP ? "Stop" : (rm == RM_HALT ? "Halt" : "?"))))
+			.c_str());
 	// ImGui::Text("Psw");
 	// for (size_t i = 0; i < 8; i++) {
 	//	ImGui::SameLine(i * 25. + 50.);
@@ -199,38 +239,56 @@ void WatchWindow::RenderCore() {
 		ImGui::TableSetupColumn("ER2", ImGuiTableColumnFlags_WidthFixed, 40);
 		ImGui::TableSetupColumn("LR", ImGuiTableColumnFlags_WidthStretch, 1);
 		ImGui::TableHeadersRow();
-		auto stack = chipset.cpu.stack.get();
-		class reverse_view {
-		public:
-			reverse_view(decltype(*stack)& vector1) : stk(vector1) {}
-			decltype(*stack)& stk;
-			auto begin() {
-				return stk.rbegin();
+		if (chipset.epscpu) {
+			for (size_t i = 0; i < (chipset.epscpu->STKPTR); i++) {
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				ImGui::Text("%06X", chipset.epscpu->stack[i] << 1);
+				ImGui::TableNextColumn();
+				ImGui::Text("%06X", chipset.epscpu->stack[i] << 1);
+				ImGui::TableNextColumn();
+				ImGui::Text("%04X", i);
+				ImGui::TableNextColumn();
+				ImGui::Text("%04X", 0);
+				ImGui::TableNextColumn();
+				ImGui::Text("%04X", 0);
+				ImGui::TableNextColumn();
+				ImGui::TextUnformatted("");
 			}
-			auto end() {
-				return stk.rend();
-			}
-		};
-
-		for (auto& frame : reverse_view{*stack}) {
-			ImGui::TableNextRow();
-			ImGui::TableNextColumn();
-			ImGui::TextUnformatted(lookup_symbol(frame.new_pc).c_str());
-			ImGui::TableNextColumn();
-			ImGui::Text("%06X", frame.new_pc);
-			ImGui::TableNextColumn();
-			ImGui::Text("%04X", frame.sp);
-			ImGui::TableNextColumn();
-			ImGui::Text("%04X", frame.er0);
-			ImGui::TableNextColumn();
-			ImGui::Text("%04X", frame.er2);
-			ImGui::TableNextColumn();
-			if (frame.lr_pushed) {
-				if (frame.lr == 0xffffff) {
-					ImGui::TextUnformatted("WatchWindow.LrDestroyed"_lc);
+		}
+		else {
+			auto stack = chipset.cpu.stack.get();
+			class reverse_view {
+			public:
+				reverse_view(decltype(*stack)& vector1) : stk(vector1) {}
+				decltype(*stack)& stk;
+				auto begin() {
+					return stk.rbegin();
 				}
-				else {
-					ImGui::TextUnformatted(lookup_symbol(frame.lr).c_str());
+				auto end() {
+					return stk.rend();
+				}
+			};
+			for (auto& frame : reverse_view{*stack}) {
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				ImGui::TextUnformatted(lookup_symbol(frame.new_pc).c_str());
+				ImGui::TableNextColumn();
+				ImGui::Text("%06X", frame.new_pc);
+				ImGui::TableNextColumn();
+				ImGui::Text("%04X", frame.sp);
+				ImGui::TableNextColumn();
+				ImGui::Text("%04X", frame.er0);
+				ImGui::TableNextColumn();
+				ImGui::Text("%04X", frame.er2);
+				ImGui::TableNextColumn();
+				if (frame.lr_pushed) {
+					if (frame.lr == 0xffffff) {
+						ImGui::TextUnformatted("WatchWindow.LrDestroyed"_lc);
+					}
+					else {
+						ImGui::TextUnformatted(lookup_symbol(frame.lr).c_str());
+					}
 				}
 			}
 		}

@@ -103,6 +103,7 @@ HwController.Value2=Screen flashing brightness coeff
 HwController.ScreenBufferSelect=Screen buffer select
 HwController.CPS=Cycles per second
 HwController.Interrupt=Raise an interrupt
+HwController.HotReload=Hot Reload
 
 MemBP.BPType=Choose breakpoint type:
 MemBP.Delete=Delete
@@ -143,6 +144,7 @@ Ui.ForceUpdateLang=Force Update Language
 Ui.ForceUpdateLangDesc=Reload default language (usually used to update language files if there is an update for android)
 Ui.Browse=Browse
 Ui.InjectionFilePath=Injection File Path
+Ui.DisableVibration=Disable Vibration
 
 Rop.Input=Input
 Rop.InputSize=Input size

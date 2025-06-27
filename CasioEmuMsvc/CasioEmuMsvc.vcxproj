@@ -47,7 +47,9 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>true</EnableASAN>
+    <EnableASAN>false</EnableASAN>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -55,6 +57,8 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ASan|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -62,7 +66,9 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>true</EnableASAN>
+    <EnableASAN>false</EnableASAN>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PatchableRelease|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -71,13 +77,17 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>true</EnableASAN>
+    <EnableASAN>false</EnableASAN>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -85,6 +95,8 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ASan|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -92,7 +104,9 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>true</EnableASAN>
+    <EnableASAN>false</EnableASAN>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PatchableRelease|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -101,6 +115,8 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -140,8 +156,11 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions> /utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System</AdditionalIncludeDirectories>
+      <AdditionalOptions>/FS /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System;asmjit/src</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>ASMJIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,8 +177,11 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions> /utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System</AdditionalIncludeDirectories>
+      <AdditionalOptions>/FS /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System;asmjit/src</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PreprocessorDefinitions>ASMJIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -178,8 +200,11 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions> /utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System</AdditionalIncludeDirectories>
+      <AdditionalOptions>/FS /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System;asmjit/src</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PreprocessorDefinitions>ASMJIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -198,13 +223,15 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions> /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/FS /utf-8 %(AdditionalOptions)</AdditionalOptions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <CreateHotpatchableImage>false</CreateHotpatchableImage>
-      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System;asmjit/src</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <PreprocessorDefinitions>ASMJIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -223,8 +250,11 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions> /utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System</AdditionalIncludeDirectories>
+      <AdditionalOptions>/FS /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System;asmjit/src</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>ASMJIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -241,8 +271,11 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions> /utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System</AdditionalIncludeDirectories>
+      <AdditionalOptions>/FS /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System;asmjit/src</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PreprocessorDefinitions>ASMJIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -262,8 +295,11 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions> /utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System</AdditionalIncludeDirectories>
+      <AdditionalOptions>/FS /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System;asmjit/src</AdditionalIncludeDirectories>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PreprocessorDefinitions>ASMJIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -283,15 +319,17 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalOptions> /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/FS /utf-8 %(AdditionalOptions)</AdditionalOptions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <CreateHotpatchableImage>false</CreateHotpatchableImage>
-      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;Chipset;Containers;Gui;Gui/imgui;Peripheral;Ext;Dcl;StartupUi;System;asmjit/src</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <PreprocessorDefinitions>ASMJIT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -304,6 +342,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Chipset\ePSCpu.cpp" />
+    <ClCompile Include="Ext\ConsoleText.cpp" />
+    <ClCompile Include="Ext\ePSDisas.cpp" />
+    <ClCompile Include="Ext\GameBuffer.cpp" />
+    <ClCompile Include="JitU8\JitU8.cpp" />
     <ClCompile Include="Gui\AddressWindow.cpp" />
     <ClCompile Include="casioemu.cpp" />
     <ClCompile Include="Chipset\Chipset.cpp" />
@@ -312,7 +355,6 @@
     <ClCompile Include="Chipset\CPUControl.cpp" />
     <ClCompile Include="Chipset\CPULoadStore.cpp" />
     <ClCompile Include="Chipset\CPUPushPop.cpp" />
-    <ClCompile Include="Chipset\ePS6800.cpp" />
     <ClCompile Include="Chipset\InterruptSource.cpp" />
     <ClCompile Include="Chipset\MMU.cpp" />
     <ClCompile Include="Chipset\MMURegion.cpp" />
@@ -320,7 +362,6 @@
     <ClCompile Include="Emulator.cpp" />
     <ClCompile Include="Ext\SysDialog.cpp" />
     <ClCompile Include="Gui\5800FileSystem.cpp" />
-    <ClCompile Include="Gui\Assemblier.cpp" />
     <ClCompile Include="Gui\CallAnalysis.cpp" />
     <ClCompile Include="Gui\Editors.cpp" />
     <ClCompile Include="Gui\Gui.cpp" />
@@ -336,7 +377,6 @@
     <ClCompile Include="Plugin\PluginApi_Impl.cpp" />
     <ClCompile Include="Plugin\PluginMan.cpp" />
     <ClCompile Include="StartupUi\StartupUi.cpp" />
-    <ClCompile Include="Gui\CasioData.cpp" />
     <ClCompile Include="Gui\CodeViewer.cpp" />
     <ClCompile Include="Gui\imgui\imgui.cpp" />
     <ClCompile Include="Gui\imgui\imgui_draw.cpp" />
@@ -351,7 +391,7 @@
     <ClCompile Include="Gui\Ui.cpp" />
     <ClCompile Include="Gui\WatchWindow.cpp" />
     <ClCompile Include="Gui\FileDialog.cpp" />
-    <ClCompile Include="Ext\Logger.cpp" />
+    <ClCompile Include="Ext\LoggerImpl.cpp" />
     <ClCompile Include="Gui\VariableWindow.cpp" />
     <ClCompile Include="Peripheral\5800Flash.cpp" />
     <ClCompile Include="Peripheral\Audio.cpp" />
@@ -373,13 +413,19 @@
     <ClCompile Include="Ext\U8Disas.cpp" />
     <ClCompile Include="Peripheral\VoltageLevelSupervisor.cpp" />
     <ClCompile Include="Ext\vibration.cpp" />
+    <ClCompile Include="asmjit\src\**\*.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Assemblier\U8Emitter.h" />
+    <ClInclude Include="Chipset\ePSCpu.h" />
+    <ClInclude Include="Ext\ConsoleText.h" />
+    <ClInclude Include="Ext\ePSDisas.h" />
+    <ClInclude Include="Ext\GameBuffer.h" />
+    <ClInclude Include="Ext\Unicode.h" />
+    <ClInclude Include="Gui\FileDialog.hpp" />
+    <ClInclude Include="Gui\UIScaling.h" />
     <ClInclude Include="Ext\3rd_licenses.h" />
     <ClInclude Include="Gui\AddressWindow.h" />
     <ClInclude Include="Binary.h" />
-    <ClInclude Include="Dcl\ChipsetInfo.h" />
     <ClInclude Include="Chipset\Chipset.hpp" />
     <ClInclude Include="Chipset\CPU.hpp" />
     <ClInclude Include="Chipset\InterruptSource.hpp" />
@@ -390,7 +436,6 @@
     <ClInclude Include="Ext\LabelFile.h" />
     <ClInclude Include="Ext\RomPackage.h" />
     <ClInclude Include="Ext\SysDialog.h" />
-    <ClInclude Include="Gui\Assemblier.h" />
     <ClInclude Include="Gui\Localization.h" />
     <ClInclude Include="Gui\PopUpDisplay.h" />
     <ClInclude Include="Gui\Theme.h" />
@@ -398,7 +443,6 @@
     <ClInclude Include="Peripheral\SD\FakeSdCard.h" />
     <ClInclude Include="Gui\5800FileSystem.h" />
     <ClInclude Include="Gui\CallAnalysis.h" />
-    <ClInclude Include="Gui\CasioData.h" />
     <ClInclude Include="Gui\CwiiHelp.h" />
     <ClInclude Include="Data\ColourInfo.hpp" />
     <ClInclude Include="Data\EventCode.hpp" />
@@ -430,6 +474,7 @@
     <ClInclude Include="Plugin\PluginMan.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Peripheral\Spi.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="stringhelper.h" />
     <ClInclude Include="Gui\Ui.hpp" />
     <ClInclude Include="Gui\WatchWindow.hpp" />
@@ -462,6 +507,7 @@
     <ClInclude Include="Ext\vibration.h" />
     <ClInclude Include="Gui\Gui.h" />
     <ClInclude Include="locales\lang.h" />
+    <ClInclude Include="asmjit\src\**\*.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
